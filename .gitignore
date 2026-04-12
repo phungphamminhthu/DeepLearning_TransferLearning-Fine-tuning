@@ -1,0 +1,19 @@
+# Bỏ qua dataset và dữ liệu thô
+data/
+datasets/
+images/
+
+# Bỏ qua các file trọng số mô hình
+*.pth
+*.h5
+*.onnx
+models/
+
+# Bỏ qua môi trường ảo và file hệ thống macOS
+venv/
+.env
+__pycache__/
+.DS_Store
+
+.venv/
+**/.venv/
