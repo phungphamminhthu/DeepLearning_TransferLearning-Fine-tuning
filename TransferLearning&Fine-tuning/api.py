@@ -4,9 +4,20 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torchvision import models, transforms
 from fastapi import FastAPI, File, UploadFile
+from fastapi.middleware.cors import CORSMiddleware # <-- MỚI: Import CORS
 from PIL import Image
 
 app = FastAPI(title="AI Image Scanner API")
+
+# --- BẮT ĐẦU FIX LỖI CORS CHO WEB ---
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # Mở cửa cho mọi trình duyệt (Chrome, Safari, Edge...)
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+# --- KẾT THÚC FIX LỖI CORS ---
 
 # 1. Khởi tạo lại cấu hình và nạp bộ não
 device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
@@ -17,11 +28,11 @@ num_ftrs = model.fc.in_features
 model.fc = nn.Sequential(
     nn.Linear(num_ftrs, 512),
     nn.ReLU(),
-    nn.Dropout(0.4),
+    nn.Dropout(0.6), # <-- ĐÃ CẬP NHẬT LÊN 0.6 CHO KHỚP VỚI MODEL MỚI TRAIN
     nn.Linear(512, 2)
 )
 
-# Nạp file .pth (đảm bảo file đang nằm cùng thư mục)
+# Nạp file .pth (đảm bảo file ai_image_detector.pth đang nằm cùng thư mục)
 model.load_state_dict(torch.load('ai_image_detector.pth', map_location=device))
 model.to(device)
 model.eval()
@@ -53,7 +64,7 @@ async def predict_image(file: UploadFile = File(...)):
         label = class_names[predicted_class.item()]
         confidence = round(probabilities[predicted_class.item()].item(), 2)
         
-        # Trả về kết quả JSON cho Mobile App
+        # Trả về kết quả JSON cho Mobile/Web App
         return {
             "status": "success",
             "label": label,

@@ -17,3 +17,11 @@ __pycache__/
 
 .venv/
 **/.venv/
+# Bỏ qua thư mục chứa ảnh
+dataset/
+
+# Bỏ qua môi trường ảo
+.venv/
+
+# Bỏ qua file model weights (thường quá nặng để push lên Git)
+*.pth
