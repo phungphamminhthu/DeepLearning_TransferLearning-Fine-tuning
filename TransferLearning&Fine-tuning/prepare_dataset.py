@@ -20,7 +20,7 @@ os.makedirs(val_dir, exist_ok=True)
 # ==========================
 anno_dir = os.path.join(dataset_path, "Anno")
 attr_file = os.path.join(anno_dir, "list_attr_celeba.txt")
-eval_file = os.path.join(anno_dir, "list_eval_partition.txt")
+eval_file = os.path.join(dataset_path, "Eval/list_eval_partition.txt")
 
 # Đọc thuộc tính Smiling
 attr_dict = {}
