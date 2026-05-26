@@ -32,12 +32,19 @@ with open(attr_file, "r") as f:
         smiling = int(parts[31])  # cột 31 là "Smiling"
         attr_dict[filename] = smiling
 
-# Đọc file chia train/val/test
+# ==========================
+# 4. Đọc file chia train/val/test
+# ==========================
 img_dir = "/content/img_align_celeba/img_align_celeba"
+
 with open(eval_file, "r") as f:
-    for line in f:
-        filename, partition = line.strip().split()
-        partition = int(partition)
+    for idx, line in enumerate(f, start=1):
+        parts = line.strip().split()
+        if len(parts) == 2:
+            filename, partition = parts[0], int(parts[1])
+        else:
+            filename = f"{idx:06d}.jpg"
+            partition = int(parts[0])
 
         src = os.path.join(img_dir, filename)
         if not os.path.exists(src):
