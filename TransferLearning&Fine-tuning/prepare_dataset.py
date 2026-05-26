@@ -33,7 +33,7 @@ with open(attr_file, "r") as f:
         attr_dict[filename] = smiling
 
 # Đọc file chia train/val/test
-img_dir = os.path.join(dataset_path, "Img/img_align_celeba")
+img_dir = "/content/img_align_celeba"
 with open(eval_file, "r") as f:
     for line in f:
         filename, partition = line.strip().split()
