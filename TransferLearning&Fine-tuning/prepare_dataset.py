@@ -66,35 +66,17 @@
 
 # print("CelebA đã được chia thành train/val theo thuộc tính Smiling.")
 
-import gdown
-import zipfile
 import os
 import shutil
 
 # ==========================
-# 1. Tải CelebA từ Google Drive
+# 1. Sử dụng CelebA từ Drive (đã copy vào /content)
 # ==========================
-output = "celeba.zip"
-if not os.path.exists(output):
-    url = "https://drive.google.com/uc?id=0B7EVK8r0v71pZjFTYXZWM3FlRnM"
-    print("📥 Đang tải CelebA từ Google Drive...")
-    dataset_path = "/content/CelebA"
-else:
-    print("✅ File celeba.zip đã tồn tại, bỏ qua bước tải.")
+dataset_path = "/content/CelebA"
+print("📂 Using local CelebA dataset at", dataset_path)
 
 # ==========================
-# 2. Giải nén nếu chưa có thư mục
-# ==========================
-extract_dir = "CelebA"
-if not os.path.exists(extract_dir):
-    print("📦 Giải nén CelebA...")
-    with zipfile.ZipFile(output, 'r') as zip_ref:
-        zip_ref.extractall(extract_dir)
-else:
-    print("✅ Thư mục CelebA đã tồn tại, bỏ qua bước giải nén.")
-
-# ==========================
-# 3. Chuẩn bị thư mục train/val
+# 2. Chuẩn bị thư mục train/val
 # ==========================
 train_dir = "dataset/train"
 val_dir   = "dataset/val"
@@ -102,9 +84,9 @@ os.makedirs(train_dir, exist_ok=True)
 os.makedirs(val_dir, exist_ok=True)
 
 # ==========================
-# 4. Đọc annotation và chia dữ liệu
+# 3. Đọc annotation và chia dữ liệu
 # ==========================
-anno_dir = os.path.join(extract_dir, "Anno")
+anno_dir = os.path.join(dataset_path, "Anno")
 attr_file = os.path.join(anno_dir, "list_attr_celeba.txt")
 eval_file = os.path.join(anno_dir, "list_eval_partition.txt")
 
@@ -119,7 +101,7 @@ with open(attr_file, "r") as f:
         attr_dict[filename] = smiling
 
 # Đọc file chia train/val/test
-img_dir = os.path.join(extract_dir, "Img/img_align_celeba")
+img_dir = os.path.join(dataset_path, "Img/img_align_celeba")
 with open(eval_file, "r") as f:
     for line in f:
         filename, partition = line.strip().split()
