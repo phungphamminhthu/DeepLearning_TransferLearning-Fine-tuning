@@ -78,7 +78,7 @@ output = "celeba.zip"
 if not os.path.exists(output):
     url = "https://drive.google.com/uc?id=0B7EVK8r0v71pZjFTYXZWM3FlRnM"
     print("📥 Đang tải CelebA từ Google Drive...")
-    gdown.download(url, output, quiet=False, resume=True)
+    dataset_path = "/content/CelebA"
 else:
     print("✅ File celeba.zip đã tồn tại, bỏ qua bước tải.")
 
