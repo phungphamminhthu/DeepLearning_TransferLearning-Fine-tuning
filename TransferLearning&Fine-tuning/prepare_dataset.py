@@ -37,6 +37,7 @@ with open(attr_file, "r") as f:
 # ==========================
 img_dir = "/content/img_align_celeba/img_align_celeba"
 
+copied_count = 0
 with open(eval_file, "r") as f:
     for idx, line in enumerate(f, start=1):
         parts = line.strip().split()
@@ -48,6 +49,7 @@ with open(eval_file, "r") as f:
 
         src = os.path.join(img_dir, filename)
         if not os.path.exists(src):
+            print("⚠️ Không tìm thấy:", src)
             continue
 
         label = "smiling" if attr_dict[filename] == 1 else "not_smiling"
@@ -60,6 +62,9 @@ with open(eval_file, "r") as f:
             continue  # bỏ qua test
 
         os.makedirs(dst, exist_ok=True)
-        shutil.copy(src, dst)
+        shutil.copy2(src, dst)
+        copied_count += 1
+        if copied_count <= 20:  # chỉ in log 20 ảnh đầu tiên cho gọn
+            print(f"✅ Copy {src} → {dst}")
 
-print("✅ CelebA đã chia thành train/val theo Smiling.")
+print(f"🎉 Hoàn tất! Đã copy {copied_count} ảnh vào dataset.")
