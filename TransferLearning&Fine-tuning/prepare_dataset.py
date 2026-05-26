@@ -29,8 +29,21 @@ with open(attr_file, "r") as f:
     for line in lines:
         parts = line.strip().split()
         filename = parts[0]
+        if not filename.endswith(".jpg"):
+            filename = f"{filename}.jpg"
         smiling = int(parts[31])  # cột 31 là "Smiling"
         attr_dict[filename] = smiling
+
+print("🔎 Ví dụ 10 dòng đầu trong attr_dict:")
+print(list(attr_dict.items())[:10])
+
+print("🔎 Ví dụ 10 dòng đầu trong eval_file:")
+with open(eval_file, "r") as f:
+    for i, line in enumerate(f):
+        if i < 10:
+            print(line.strip())
+        else:
+            break
 
 # ==========================
 # 4. Đọc file chia train/val/test
@@ -47,9 +60,16 @@ with open(eval_file, "r") as f:
             filename = f"{idx:06d}.jpg"
             partition = int(parts[0])
 
+        if not filename.endswith(".jpg"):
+            filename = f"{filename}.jpg"
+
         src = os.path.join(img_dir, filename)
         if not os.path.exists(src):
             print("⚠️ Không tìm thấy:", src)
+            continue
+
+        if filename not in attr_dict:
+            print("⚠️ Không có trong attr_dict:", filename)
             continue
 
         label = "smiling" if attr_dict[filename] == 1 else "not_smiling"
